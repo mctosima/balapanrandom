@@ -20,10 +20,10 @@ const ANIMALS = [
   ['🐫','Unta Baktria'],['🐀','Tikus Got'],['🦝','Rakun'],['🐹','Hamster'],
 ];
 const SAMPLE = ['Budi','Siti','Agus','Dewi','Rizky','Putri','Bayu','Ayu','Fajar','Intan','Dimas','Nanda'];
-const TINTS = ['#FFE3D9','#FFF1BF','#D6F3EF','#E4E0FA','#FFDDEB','#DDF0C9'];
-const CROWD = ['#FF5A36','#FFC93C','#1FA79A','#F7F3E8','#F58CB3','#7FB7FF'];
+const TINTS = ['#ffffff','#e8eff9','#d3e4ff','#f6e7b4','#f1f3fb','#c3e6fd'];
+const CROWD = ['#da251c','#cca72e','#80c6f9','#ffffff','#2392ec','#f6e7b4'];
 const EMOJI_FONT = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
-const UI_FONT = '"Bricolage Grotesque",system-ui,sans-serif';
+const UI_FONT = '"Google Sans Flex","Google Sans",system-ui,sans-serif';
 const MAX_N = 200;
 const STORE = 'balapanrandom:v1';
 
@@ -388,11 +388,11 @@ function banner(wx, text, color) {
   const x = wx - R.cam;
   if (x < -120 || x > W + 120) return;
   const top = G.standTop - 30;
-  ctx.fillStyle = '#1D1A2F';
+  ctx.fillStyle = '#104378';
   ctx.fillRect(x - 3, top, 6, G.trackTop - top);
-  ctx.fillStyle = color; ctx.strokeStyle = '#1D1A2F'; ctx.lineWidth = 3;
+  ctx.fillStyle = color; ctx.strokeStyle = '#104378'; ctx.lineWidth = 3;
   ctx.beginPath(); ctx.roundRect(x - 52, top - 4, 104, 28, 7); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#1D1A2F'; ctx.font = `800 15px ${UI_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#104378'; ctx.font = `800 15px ${UI_FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.fillText(text, x, top + 11);
 }
 
@@ -402,9 +402,9 @@ function draw(time) {
 
   // sky
   let g = ctx.createLinearGradient(0, 0, 0, trackTop);
-  g.addColorStop(0, '#7CCFF2'); g.addColorStop(1, '#FDF1C7');
+  g.addColorStop(0, '#80c6f9'); g.addColorStop(1, '#e8eff9');
   ctx.fillStyle = g; ctx.fillRect(0, 0, W, trackTop);
-  ctx.fillStyle = '#FFC93C'; ctx.beginPath(); ctx.arc(W * 0.8 - cam * 0.01, H * 0.13, Math.min(46, H * 0.08), 0, 6.283); ctx.fill();
+  ctx.fillStyle = '#e3bd45'; ctx.beginPath(); ctx.arc(W * 0.8 - cam * 0.01, H * 0.13, Math.min(46, H * 0.08), 0, 6.283); ctx.fill();
   ctx.fillStyle = 'rgba(255,255,255,.85)';
   for (let i = 0; i < 6; i++) {
     const span = W + 320, cx = ((i * 337 - cam * 0.06 - time * 5) % span + span) % span - 160, cy = H * (0.05 + (i * 37 % 17) / 100);
@@ -414,7 +414,7 @@ function draw(time) {
   hills(0.3, standTop + 14, H * 0.06, 0.008, '#6BBF7F');
 
   // grandstand + crowd
-  ctx.fillStyle = '#2B2A4C'; ctx.fillRect(0, standTop, W, trackTop - standTop);
+  ctx.fillStyle = '#104378'; ctx.fillRect(0, standTop, W, trackTop - standTop);
   const sp = 15, rows = Math.max(2, Math.floor((trackTop - standTop - 8) / 13));
   for (let k = Math.floor(cam / sp) - 1, end = k + W / sp + 3; k < end; k++) {
     for (let r = 0; r < rows; r++) {
@@ -426,7 +426,7 @@ function draw(time) {
   }
   // fence
   ctx.fillStyle = '#fff'; ctx.fillRect(0, trackTop - 5, W, 5);
-  ctx.fillStyle = '#1D1A2F'; ctx.fillRect(0, trackTop, W, 2);
+  ctx.fillStyle = '#104378'; ctx.fillRect(0, trackTop, W, 2);
 
   // track
   ctx.fillStyle = '#D9905C'; ctx.fillRect(0, trackTop, W, trackBot - trackTop);
@@ -449,14 +449,14 @@ function draw(time) {
   if (x > -50 && x < W + 10) {
     const q = 11;
     for (let yy = trackTop + 2, r = 0; yy < trackBot; yy += q, r++)
-      for (let c = 0; c < 3; c++) { ctx.fillStyle = (r + c) % 2 ? '#fff' : '#1D1A2F'; ctx.fillRect(x + c * q, yy, q, Math.min(q, trackBot - yy)); }
+      for (let c = 0; c < 3; c++) { ctx.fillStyle = (r + c) % 2 ? '#fff' : '#104378'; ctx.fillRect(x + c * q, yy, q, Math.min(q, trackBot - yy)); }
   }
   banner(size * 0.6, 'START', '#fff');
-  banner(R.L + 16, 'FINISH', '#FFC93C');
+  banner(R.L + 16, 'FINISH', '#e3bd45');
 
   // grass
   ctx.fillStyle = '#58B368'; ctx.fillRect(0, trackBot, W, H - trackBot);
-  ctx.fillStyle = '#1D1A2F'; ctx.fillRect(0, trackBot, W, 2);
+  ctx.fillStyle = '#104378'; ctx.fillRect(0, trackBot, W, 2);
   ctx.fillStyle = '#3F9A55';
   for (let k = Math.floor(cam * 1.25 / 70) - 1, end = k + W / 70 + 3; k < end; k++) ctx.fillRect(k * 70 - cam * 1.25, trackBot + (H - trackBot) * 0.45, 22, 3);
 
@@ -496,10 +496,10 @@ function draw(time) {
     if (G.showAll) { px = sx - size * 0.62 - ww; py = r.y - size * 0.3 - hh / 2; }
     else { px = sx - ww / 2; py = r.y - size * 1.0 - hh - r.rank * 2; }
     px = Math.max(4, px);
-    ctx.fillStyle = lead ? '#FFC93C' : 'rgba(29,26,47,.86)';
+    ctx.fillStyle = lead ? '#e3bd45' : 'rgba(16,67,120,.9)';
     ctx.beginPath(); ctx.roundRect(px, py, ww, hh, hh / 2); ctx.fill();
-    if (lead) { ctx.strokeStyle = '#1D1A2F'; ctx.lineWidth = 2; ctx.stroke(); }
-    ctx.fillStyle = lead ? '#1D1A2F' : '#fff'; ctx.textAlign = 'left';
+    if (lead) { ctx.strokeStyle = '#104378'; ctx.lineWidth = 2; ctx.stroke(); }
+    ctx.fillStyle = lead ? '#4f3d00' : '#fff'; ctx.textAlign = 'left';
     ctx.fillText(text, px + 7, py + hh / 2 + 1);
   };
   if (G.showAll) R.racers.forEach(lab);
