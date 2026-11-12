@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Balapan Random — undian nama pakai balapan hewan</title>
+<meta name="description" content="Masukkan nama, tiap orang diundi dapat hewan, lalu tonton balapannya. Pemenang ditentukan acak dan adil.">
+<meta property="og:title" content="Balapan Random">
+<meta property="og:description" content="Undian nama paling seru: 80+ hewan, satu lintasan, satu juara.">
+<meta name="theme-color" content="#FFF4DC">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="./" aria-label="Balapan Random">
+    <span class="flag">🏁</span><span>Balapan<b>Random</b></span>
+  </a>
+  <button id="btnSound" class="btn ghost small" type="button" aria-pressed="true">🔊 Suara</button>
+</header>
+
+<main>
+  <!-- ============ SETUP ============ -->
+  <section id="s-setup" class="screen">
+    <div class="hero">
+      <h1>Siapa yang <em>menang</em>?<br>Biar hewan yang menentukan.</h1>
+      <p class="lead">Tulis nama peserta, tiap orang diundi dapat satu hewan, lalu semuanya adu cepat di lintasan. Hasilnya acak dan adil.</p>
+      <span class="sticker" id="stickerCount">80+ hewan</span>
+    </div>
+
+    <div class="strip" aria-hidden="true"><div class="strip-in" id="strip"></div></div>
+
+    <div class="cols">
+      <div class="panel">
+        <div class="panel-head">
+          <label for="names">Daftar peserta</label>
+          <span class="pill" id="count">0 peserta</span>
+        </div>
+        <textarea id="names" spellcheck="false" placeholder="Satu nama per baris…&#10;Budi&#10;Siti&#10;Agus"></textarea>
+        <div class="row">
+          <button id="btnSample" class="btn ghost small" type="button">Isi contoh</button>
+          <button id="btnMix" class="btn ghost small" type="button">Acak urutan</button>
+          <button id="btnClear" class="btn ghost small" type="button">Bersihkan</button>
+          <button id="btnShare" class="btn ghost small" type="button">Salin link</button>
+        </div>
+      </div>
+
+      <div class="panel side">
+        <div class="field">
+          <label for="dur">Durasi balapan <b id="durLabel">20 detik</b></label>
+          <input id="dur" type="range" min="5" max="60" step="5" value="20">
+        </div>
+        <div class="field">
+          <label>Jumlah pemenang</label>
+          <div class="stepper">
+            <button id="winMinus" class="btn ghost small" type="button" aria-label="Kurangi">−</button>
+            <output id="winLabel">1</output>
+            <button id="winPlus" class="btn ghost small" type="button" aria-label="Tambah">+</button>
+          </div>
+        </div>
+        <button id="btnDraft" class="btn primary big" type="button">Undi hewan →</button>
+        <p class="hint" id="setupHint">Minimal 2 peserta, maksimal 200.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DRAFT ============ -->
+  <section id="s-draft" class="screen" hidden>
+    <div class="bar">
+      <button class="btn ghost small" data-go="setup" type="button">← Ubah peserta</button>
+      <h2 id="draftTitle">Mengundi hewan…</h2>
+      <div class="row end">
+        <button id="btnRedraft" class="btn ghost" type="button">🎲 Undi ulang</button>
+        <button id="btnRace" class="btn primary" type="button" disabled>Mulai balapan 🏁</button>
+      </div>
+    </div>
+    <div id="grid" class="grid"></div>
+  </section>
+
+  <!-- ============ RACE ============ -->
+  <section id="s-race" class="screen" hidden>
+    <div class="stage" id="stage">
+      <canvas id="track"></canvas>
+
+      <div class="hud top-left">
+        <div class="progress"><i id="prog"></i></div>
+        <span class="pill dark" id="clock">0.0 dtk</span>
+      </div>
+
+      <ol class="board" id="board"></ol>
+
+      <div class="comm" id="comm"></div>
+
+      <div class="hud bottom-right">
+        <button id="btnFull" class="btn ghost small" type="button">⛶ Layar penuh</button>
+        <button id="btnSkip" class="btn ghost small" type="button">Lewati ⏭</button>
+        <button class="btn ghost small" data-go="setup" type="button">Keluar</button>
+      </div>
+
+      <div class="count" id="countdown" hidden></div>
+
+      <!-- ============ RESULT ============ -->
+      <div id="result" class="result" hidden>
+        <div class="result-panel">
+          <p class="eyebrow" id="resEyebrow">Juara balapan</p>
+          <div class="champ">
+            <div class="champ-em" id="champEm"></div>
+            <div>
+              <div class="champ-name" id="champName"></div>
+              <div class="champ-sub" id="champSub"></div>
+            </div>
+          </div>
+          <div class="podium" id="podium"></div>
+          <div class="row center wrap">
+            <button id="btnAgain" class="btn primary" type="button">Balapan ulang 🏁</button>
+            <button id="btnDrop" class="btn" type="button">Singkirkan pemenang</button>
+            <button id="btnReshuffle" class="btn ghost" type="button">🎲 Undi hewan lagi</button>
+            <button class="btn ghost" data-go="setup" type="button">Ubah peserta</button>
+          </div>
+          <details class="full" open>
+            <summary>Klasemen lengkap</summary>
+            <ol id="fullList"></ol>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">Diacak dengan <code>crypto.getRandomValues</code> · semua berjalan di browser, tidak ada data yang dikirim.</footer>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="toast" class="toast" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
